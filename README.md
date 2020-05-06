@@ -23,5 +23,5 @@ input file format: ./example/data.txt
 
 result:
 
-![image-20200506175116515](D:\project\go\src\github.com\cdyhelp\echarts-line\README.assets\image-20200506175116515.png)
+![image-20200506175116515](./README.assets/image-20200506175116515.png)
 
