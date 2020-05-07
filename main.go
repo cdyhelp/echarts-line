@@ -93,17 +93,13 @@ func main() {
 			},
 			xAxis: {
 				type: 'category',
+				name : {{.XAxisName}},
 				boundaryGap: false,
-				data: {{.XAxisData}},
-				axisLabel: {
-					formatter: '{value}{{.XAxisLabel}}'
-				}
+				data: {{.XAxisData}}
 			},
 			yAxis: {
 				type: 'value',
-				axisLabel: {
-					formatter: '{value}{{.YAxisLabel}}'
-				}
+				name : {{.YAxisName}}
 			},
 			series: [
 				{{range .Series}}
@@ -134,8 +130,8 @@ func main() {
 	var option struct {
 		Page       template.HTML
 		Title      template.HTML
-		XAxisLabel template.HTML
-		YAxisLabel template.HTML
+		XAxisName  template.HTML
+		YAxisName  template.HTML
 		LegendName []template.HTML
 		XAxisData  []string
 		Series     []struct {
@@ -146,7 +142,7 @@ func main() {
 	option.Page = template.HTML(inputData[dataPage])
 	option.Title = template.HTML(inputData[dataTitle])
 	axisLabel := strings.Split(inputData[dataAxisLabel], "\t")
-	option.XAxisLabel, option.YAxisLabel = template.HTML(axisLabel[0]), template.HTML(axisLabel[1])
+	option.XAxisName, option.YAxisName = template.HTML(axisLabel[0]), template.HTML(axisLabel[1])
 	option.XAxisData = make([]string, len(inputData)-3)
 	legendName := strings.Split(inputData[dataLegendName], "\t")
 	option.LegendName = make([]template.HTML, len(legendName)-1)
