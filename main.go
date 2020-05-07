@@ -93,20 +93,20 @@ func main() {
 			},
 			xAxis: {
 				type: 'category',
-				name : {{.XAxisName}},
+				name: {{.XAxisName}},
 				boundaryGap: false,
 				data: {{.XAxisData}}
 			},
 			yAxis: {
 				type: 'value',
-				name : {{.YAxisName}}
+				name: {{.YAxisName}}
 			},
 			series: [
 				{{range .Series}}
 				{
 					name: {{.Name}},
 					type: 'line',
-					label : {show : true},
+					label: {show: true},
 					data: {{.Data}},
 					markLine: {
 						data: [
@@ -177,5 +177,5 @@ func main() {
 		log.Fatal(err)
 		return
 	}
-	println("output file : " + outputFile)
+	println("output file: " + outputFile)
 }
