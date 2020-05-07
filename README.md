@@ -17,11 +17,12 @@ input file format: ./example/data.txt
 ```
 1 [page tile]
 2 [title]
-3 [data]
-4 ...
+3 [axis label]
+4 [data]
+5 ...
 ```
 
 result:
 
-![image-20200506175116515](./README.assets/image-20200506175116515.png)
+![image-20200506175116515](./README.assets/未来一周气温变化.png)
 

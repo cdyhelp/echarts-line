@@ -22,6 +22,14 @@ func init() {
 	flag.Parse()
 }
 
+const (
+	dataPage int = iota
+	dataTitle
+	dataAxisLabel
+	dataLegendName
+	dataValue
+)
+
 func main() {
 	if input == "" {
 		flag.PrintDefaults()
@@ -69,7 +77,7 @@ func main() {
 				trigger: 'axis'
 			},
 			legend: {
-				data: {{.LegendData}}
+				data: {{.LegendName}}
 			},
 			toolbox: {
 				show: true,
@@ -86,23 +94,24 @@ func main() {
 			xAxis: {
 				type: 'category',
 				boundaryGap: false,
-				data: {{.XAxisData}}
+				data: {{.XAxisData}},
+				axisLabel: {
+					formatter: '{value}{{.XAxisLabel}}'
+				}
 			},
 			yAxis: {
-				type: 'value'
+				type: 'value',
+				axisLabel: {
+					formatter: '{value}{{.YAxisLabel}}'
+				}
 			},
 			series: [
 				{{range .Series}}
 				{
 					name: {{.Name}},
 					type: 'line',
+					label : {show : true},
 					data: {{.Data}},
-					markPoint: {
-						data: [
-							{type: 'max', name: '最大值'},
-							{type: 'min', name: '最小值'}
-						]
-					},
 					markLine: {
 						data: [
 							{type: 'average', name: '平均值'}
@@ -125,30 +134,34 @@ func main() {
 	var option struct {
 		Page       template.HTML
 		Title      template.HTML
-		LegendData []template.HTML
+		XAxisLabel template.HTML
+		YAxisLabel template.HTML
+		LegendName []template.HTML
 		XAxisData  []string
 		Series     []struct {
 			Name template.HTML
 			Data []float64
 		}
 	}
-	option.Page = template.HTML(inputData[0])
-	option.Title = template.HTML(inputData[1])
+	option.Page = template.HTML(inputData[dataPage])
+	option.Title = template.HTML(inputData[dataTitle])
+	axisLabel := strings.Split(inputData[dataAxisLabel], "\t")
+	option.XAxisLabel, option.YAxisLabel = template.HTML(axisLabel[0]), template.HTML(axisLabel[1])
 	option.XAxisData = make([]string, len(inputData)-3)
-	dataName := strings.Split(inputData[2], "\t")
-	option.LegendData = make([]template.HTML, len(dataName)-1)
+	legendName := strings.Split(inputData[dataLegendName], "\t")
+	option.LegendName = make([]template.HTML, len(legendName)-1)
 	option.Series = make([]struct {
 		Name template.HTML
 		Data []float64
-	}, len(dataName)-1)
-	for i := 1; i < len(dataName); i++ {
-		option.LegendData[i-1] = template.HTML(dataName[i])
-		option.Series[i-1].Name = template.HTML(dataName[i])
+	}, len(legendName)-1)
+	for i := 1; i < len(legendName); i++ {
+		option.LegendName[i-1] = template.HTML(legendName[i])
+		option.Series[i-1].Name = template.HTML(legendName[i])
 	}
-	for i := 3; i < len(inputData); i++ {
+	for i := dataValue; i < len(inputData); i++ {
 		data := strings.Split(inputData[i], "\t")
 		option.XAxisData[i-3] = data[0]
-		for j := 0; j < len(dataName)-1; j++ {
+		for j := 0; j < len(legendName)-1; j++ {
 			number, err := strconv.ParseFloat(data[j+1], 64)
 			if err != nil {
 				log.Fatal(err)
