@@ -143,7 +143,7 @@ func main() {
 	option.Title = template.HTML(inputData[dataTitle])
 	axisLabel := strings.Split(inputData[dataAxisLabel], "\t")
 	option.XAxisName, option.YAxisName = template.HTML(axisLabel[0]), template.HTML(axisLabel[1])
-	option.XAxisData = make([]string, len(inputData)-3)
+	option.XAxisData = make([]string, len(inputData)-dataValue)
 	legendName := strings.Split(inputData[dataLegendName], "\t")
 	option.LegendName = make([]template.HTML, len(legendName)-1)
 	option.Series = make([]struct {
@@ -156,7 +156,7 @@ func main() {
 	}
 	for i := dataValue; i < len(inputData); i++ {
 		data := strings.Split(inputData[i], "\t")
-		option.XAxisData[i-3] = data[0]
+		option.XAxisData[i-dataValue] = data[0]
 		for j := 0; j < len(legendName)-1; j++ {
 			number, err := strconv.ParseFloat(data[j+1], 64)
 			if err != nil {
